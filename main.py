@@ -1,11 +1,42 @@
 # from <file> import <class>
 from account import Account
+from account_manager import AccountManager
 
 # pyenv local [version] in the project directory
 
 # Arrays have mMixed data types, mutable, and ordered.
 # Constants are usually written in all-caps, but it's just a readability thing
 VALID_OPTIONS = [1, 2, 3, 4]
+
+def ask_name():
+	while True:
+		# Sends a prompt, reads a line, converts it to a string, and returns that
+		# The prompt is not mandatory
+		user = input("How would you like to be called?\n- ")
+
+		if not any(char.isdigit() for char in user):
+			print("\nHello,", user)
+			return user
+		
+		# Prints a message to the screen
+		print("\nYour name cannot contain numbers.")
+
+def ask_balance():
+	while True:
+		try:
+			return float(input("How much will be your initial deposit?\n- "))
+		except ValueError:
+			print("\nInvalid value.")
+
+def initialise(manager: AccountManager):
+	banner = """
+	██▄  ▄██  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ ▄▄ ▄▄   ██▄  ▄██  ▄▄▄   ▄▄▄▄ ▄▄ ▄▄ ▄▄ ▄▄  ▄▄ ▄▄▄▄▄ 
+	██ ▀▀ ██ ██▀██ ███▄██ ██▄▄  ▀███▀   ██ ▀▀ ██ ██▀██ ██▀▀▀ ██▄██ ██ ███▄██ ██▄▄  
+	██    ██ ▀███▀ ██ ▀██ ██▄▄▄   █     ██    ██ ██▀██ ▀████ ██ ██ ██ ██ ▀██ ██▄▄▄ 
+	"""
+	
+	print(banner)
+	manager.add_account(ask_name(), ask_balance())
 
 # def to declare methods
 def ask_option():
@@ -19,7 +50,7 @@ def ask_option():
 			chosen_option = int(input("\nOption: "))
 			
 			# Check if value is inside the array
-			if (chosen_option not in VALID_OPTIONS):
+			if chosen_option not in VALID_OPTIONS:
 				# Would break the program if there was no "except"
 				# Try to be specific when dealing with exceptions
 				raise ValueError()
@@ -29,14 +60,8 @@ def ask_option():
 		except ValueError:
 			print("Invalid option. Choose again.")
 
-# Sends a prompt, reads a line, converts it to a string, and returns that
-# The prompt is not mandatory
-user = input("How would you like to be called??\n- ")
-
-# Prints a message to the screen
-print("\nHello,", user)
-
-current_account = Account(1, user, 100)
+manager = AccountManager()
+initialise(manager)
 
 while True:
 	# Does something different for each value of the specified variable

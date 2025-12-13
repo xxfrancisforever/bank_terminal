@@ -1,11 +1,12 @@
 # class to declare a class
 class Account:
-	# constructor, pass self as first argument
+	#Constructor, pass self as first argument
 	def __init__(self, account_id, owner, balance):
-		self.account_id = account_id
 		self.owner = owner
 		self.balance = balance
-
+		
+		# The id needs to be generated outside because it requires all the previous accounts
+		self.account_id = account_id
 
 	# Pass self as the first argument for instance methods
 	def show_balance(self):
