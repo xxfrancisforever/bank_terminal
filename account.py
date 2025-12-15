@@ -2,12 +2,12 @@
 class Account:
 	#Constructor, pass self as first argument
 	def __init__(self, account_id, owner, balance):
-		self.owner = owner
-		self.balance = balance
-		
 		# The id needs to be generated outside because it requires all the previous accounts
 		self.account_id = account_id
 
+		self.owner = owner
+		self.balance = balance
+		
 	# Pass self as the first argument for instance methods
 	def show_balance(self):
 		# self has the attributes of an object

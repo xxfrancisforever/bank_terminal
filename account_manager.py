@@ -2,6 +2,7 @@ import json
 import random
 from types import SimpleNamespace
 from account import Account
+import pdb
 
 class AccountManager:
 	def __init__(self, filename="accounts.json"):
@@ -9,14 +10,31 @@ class AccountManager:
 		self.accounts = {}
 
 	def load_accounts(self):
-		# with ensures a resource is cleaned after use
-		# mode "r" is for read-only
-		with open(self.filename, mode="r") as file:
-			data = json.load(file)
-			for a in data:
-				print(a)
+		try:
+			with open(self.filename, mode="r") as file:
+				data = json.load(file)
+				
+				# The data is a dict, so just doing "for a in data" would give the keys
+				for a in data.values():
+					breakpoint()
+					self.accounts[a['account_id']] = Account(
+						a['account_id'],
+						a['owner'],
+						a['balance']
+					)
+
+		# It's better to catch exceptions instead of checking for validity
+		except FileNotFoundError:
+			with open(self.filename, mode="w") as file:
+				# dump converts python objects to JSON format and writes them to a file
+				json.dump([], file, indent=4)
+
+		except json.JSONDecodeError:
+			with open(self.filename, mode="w") as file:
+				json.dump([], file, indent=4)
 	
 	def save(self):
+		# "w" mode creates a file if doesn't exist, and overwrites it completely
 		with open(self.filename, mode="w") as file:
 			# json can't serialise an object, turn into dict			
 			# o.__dict__ makes a dict out of the object attributes, ALL included

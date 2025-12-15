@@ -1,3 +1,7 @@
+# TODO 1: Choice for new account
+# TODO 2: Saving after every action
+# TODO 3: Transfer money by account id
+
 # from <file> import <class>
 from account import Account
 from account_manager import AccountManager
@@ -61,6 +65,7 @@ def ask_option():
 			print("Invalid option. Choose again.")
 
 manager = AccountManager()
+manager.load_accounts()
 initialise(manager)
 
 while True:
