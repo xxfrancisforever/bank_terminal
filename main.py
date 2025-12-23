@@ -1,8 +1,8 @@
-# TODO 1: Choice for new account
 # TODO 2: Saving after every action
 # TODO 3: Transfer money by account id
 
 # from <file> import <class>
+import pdb
 from account import Account
 from account_manager import AccountManager
 
@@ -10,7 +10,9 @@ from account_manager import AccountManager
 
 # Arrays have mMixed data types, mutable, and ordered.
 # Constants are usually written in all-caps, but it's just a readability thing
-VALID_OPTIONS = [1, 2, 3, 4]
+VALID_ACTIONS = [1, 2, 3, 4]
+YES_NO_OPTIONS = ['y', 'n']
+MANAGER = AccountManager()
 
 def ask_name():
 	while True:
@@ -32,7 +34,23 @@ def ask_balance():
 		except ValueError:
 			print("\nInvalid value.")
 
-def initialise(manager: AccountManager):
+def get_account():
+	while True:
+		existing = input("\nDo you already have an account with us? [y/n]\n- ")
+		if existing in YES_NO_OPTIONS:
+			break
+
+	if existing == 'y':
+		while True:
+			account_id = input("\nWhat's your account id?\n- ")
+
+			account_found = MANAGER.retrieve_account(account_id)
+			if account_found:
+				return account_found	
+	else:
+		return MANAGER.add_account(ask_name(), ask_balance())
+
+def initialise():
 	banner = """
 	██▄  ▄██  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ ▄▄ ▄▄   ██▄  ▄██  ▄▄▄   ▄▄▄▄ ▄▄ ▄▄ ▄▄ ▄▄  ▄▄ ▄▄▄▄▄ 
 	██ ▀▀ ██ ██▀██ ███▄██ ██▄▄  ▀███▀   ██ ▀▀ ██ ██▀██ ██▀▀▀ ██▄██ ██ ███▄██ ██▄▄  
@@ -40,7 +58,7 @@ def initialise(manager: AccountManager):
 	"""
 	
 	print(banner)
-	manager.add_account(ask_name(), ask_balance())
+	return get_account()
 
 # def to declare methods
 def ask_option():
@@ -54,7 +72,7 @@ def ask_option():
 			chosen_option = int(input("\nOption: "))
 			
 			# Check if value is inside the array
-			if chosen_option not in VALID_OPTIONS:
+			if chosen_option not in VALID_ACTIONS:
 				# Would break the program if there was no "except"
 				# Try to be specific when dealing with exceptions
 				raise ValueError()
@@ -64,9 +82,8 @@ def ask_option():
 		except ValueError:
 			print("Invalid option. Choose again.")
 
-manager = AccountManager()
-manager.load_accounts()
-initialise(manager)
+current_account = initialise()
+print("Welcome, ", current_account.owner)
 
 while True:
 	# Does something different for each value of the specified variable

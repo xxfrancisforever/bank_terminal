@@ -9,6 +9,8 @@ class AccountManager:
 		self.filename = filename
 		self.accounts = {}
 
+		self.load_accounts()
+
 	def load_accounts(self):
 		try:
 			with open(self.filename, mode="r") as file:
@@ -16,7 +18,6 @@ class AccountManager:
 				
 				# The data is a dict, so just doing "for a in data" would give the keys
 				for a in data.values():
-					breakpoint()
 					self.accounts[a['account_id']] = Account(
 						a['account_id'],
 						a['owner'],
@@ -32,6 +33,12 @@ class AccountManager:
 		except json.JSONDecodeError:
 			with open(self.filename, mode="w") as file:
 				json.dump([], file, indent=4)
+
+	def retrieve_account(self, account_id):
+		try:
+			return self.accounts[account_id]
+		except KeyError:
+			return None
 	
 	def save(self):
 		# "w" mode creates a file if doesn't exist, and overwrites it completely
