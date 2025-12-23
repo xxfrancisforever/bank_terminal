@@ -13,6 +13,8 @@ class AccountManager:
 
 	def load_accounts(self):
 		try:
+			# with cleans a resource when it stops being used
+			# "r" is read-only mode
 			with open(self.filename, mode="r") as file:
 				data = json.load(file)
 				
@@ -25,13 +27,9 @@ class AccountManager:
 					)
 
 		# It's better to catch exceptions instead of checking for validity
-		except FileNotFoundError:
+		except (FileNotFoundError, json.JSONDecodeError):
 			with open(self.filename, mode="w") as file:
 				# dump converts python objects to JSON format and writes them to a file
-				json.dump([], file, indent=4)
-
-		except json.JSONDecodeError:
-			with open(self.filename, mode="w") as file:
 				json.dump([], file, indent=4)
 
 	def retrieve_account(self, account_id):
