@@ -1,7 +1,4 @@
 import pdb
-from helper import ask_monetary_value
-
-NOT_ENOUGH_MONEY = "\nYou don't have enough balance to complete this action"
 
 # class to declare a class
 class Account:
@@ -18,28 +15,26 @@ class Account:
 		# self has the attributes of an object
 		print("\nBalance for {}: €{:.2f}".format(self.account_id, self.balance))
 
-	def deposit(self):
-		message = "How much would you like to deposit?"
-		self.balance += ask_monetary_value(message)
+	def deposit(self, value):	
+		if value <= 0:
+			return None
 
-	def withdraw(self):
-		message = "How much would you like to withdraw?"
-		withdraw_value = ask_monetary_value(message)	
-	
-		if (self.balance - withdraw_value < 0):
-			print(NOT_ENOUGH_MONEY)
-			return
+		self.balance += value
+		return value
+
+	def withdraw(self, value):
+		if (self.balance - value < 0):
+			return None
 		else:
 			# For the variable to change outside of the function, return the new value
-			self.balance -= withdraw_value	
+			self.balance -= value	
+			return value
 
-	def transfer_to(self, other_account):
-		message = "How much would you like to transfer?"
-		transfer_value = ask_monetary_value(message)
-
-		if transfer_value  > self.balance:
-			print(NOT_ENOUGH_MONEY)
-			return
+	def transfer_to(self, other_account, value):
+		if value > self.balance:
+			return None
 		
-		self.balance -= transfer_value
-		other_account.balance += transfer_value
+		self.balance -= value
+		other_account.balance += value
+
+		return value
